@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Order Confirmed | Brownies Hub{% endblock %}
+
+{% block content %}
+
+<div class="container" style="padding-top: 3rem; padding-bottom: 4rem;">
+    <div class="success-card">
+        <!-- Success Icon -->
+        <div class="success-icon">✓</div>
+        
+        <h1 style="font-size: 2rem; color: var(--primary-dark); margin-bottom: 0.5rem;">
+            Order Placed Successfully!
+        </h1>
+        <p style="color: var(--text-muted); font-size: 1rem;">
+            Thank you for ordering with Sweet Crumbs Bakery & Brownies Hub. Our bakers are preparing your fresh treats!
+        </p>
+
+        <!-- Order Receipt Details -->
+        <div class="receipt-details">
+            <div class="receipt-row">
+                <span style="color: var(--text-muted);">Order Number:</span>
+                <strong style="color: var(--primary);">#{{ order.id }}</strong>
+            </div>
+
+            <div class="receipt-row">
+                <span style="color: var(--text-muted);">Customer Name:</span>
+                <strong>{{ order.customer_name }}</strong>
+            </div>
+
+            <div class="receipt-row">
+                <span style="color: var(--text-muted);">Phone Number:</span>
+                <span>{{ order.phone }}</span>
+            </div>
+
+            <div class="receipt-row">
+                <span style="color: var(--text-muted);">Delivery Address:</span>
+                <span style="text-align: right; max-width: 60%;">{{ order.address }}</span>
+            </div>
+
+            <div class="receipt-row">
+                <span style="color: var(--text-muted);">Order Status:</span>
+                <span class="badge {% if order.status == 'Delivered' %}badge-success{% elif order.status == 'Preparing' %}badge-info{% elif order.status == 'Ready' %}badge-amber{% else %}badge-warning{% endif %}">
+                    ● {{ order.status }}
+                </span>
+            </div>
+
+            <div class="receipt-row" style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px dashed var(--border-color); font-size: 1.15rem;">
+                <strong>Total Amount Paid/Due:</strong>
+                <strong style="color: var(--accent-hover);">₹{{ "%.2f"|format(order.total_amount) }}</strong>
+            </div>
+        </div>
+
+        <!-- Ordered Items Summary -->
+        {% if order_items %}
+        <div style="text-align: left; margin: 1.5rem 0; padding: 1rem; background: #FFFFFF; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+            <h4 style="margin-bottom: 0.75rem; font-size: 0.95rem; color: var(--primary);">Ordered Bakery Items:</h4>
+            {% for item in order_items %}
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; padding: 4px 0;">
+                <span>{{ item.quantity }}x {{ item.product_name }}</span>
+                <strong>₹{{ "%.2f"|format(item.subtotal) }}</strong>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Navigation Actions -->
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem;">
+            <a href="{{ url_for('products_page') }}" class="btn btn-primary">
+                🍰 Continue Shopping
+            </a>
+            <a href="{{ url_for('home_page') }}" class="btn btn-secondary">
+                🏠 Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

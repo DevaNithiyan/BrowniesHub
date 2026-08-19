@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout | Brownies Hub{% endblock %}
+
+{% block content %}
+
+<div class="container" style="padding-top: 2.5rem; padding-bottom: 3.5rem;">
+    <!-- Page Header -->
+    <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+        <span class="section-subtitle">Final Step</span>
+        <h1 class="section-title">Delivery & Checkout</h1>
+    </div>
+
+    <div class="cart-layout">
+        <!-- Left: Delivery Information Form -->
+        <div style="background: var(--bg-surface); padding: 2.25rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+            <h3 style="font-size: 1.3rem; margin-bottom: 1.5rem; color: var(--primary-dark); display: flex; align-items: center; gap: 0.5rem;">
+                📍 <span>Delivery Details</span>
+            </h3>
+
+            <form id="checkoutForm" onsubmit="handlePlaceOrder(event)">
+                <div class="form-group">
+                    <label class="form-label" for="customerName">Full Name *</label>
+                    <input type="text" 
+                           id="customerName" 
+                           class="form-control" 
+                           placeholder="Enter your full name" 
+                           value="{{ current_user.name if current_user.is_authenticated else '' }}" 
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="customerPhone">Phone Number *</label>
+                    <input type="tel" 
+                           id="customerPhone" 
+                           class="form-control" 
+                           placeholder="e.g. +91 98765 43210" 
+                           required>
+                    <div class="form-text">Our delivery driver will call this number upon arrival.</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="customerAddress">Complete Delivery Address *</label>
+                    <textarea id="customerAddress" 
+                              class="form-control" 
+                              rows="4" 
+                              placeholder="Flat/House number, Street, Landmark, Area, City and Pincode" 
+                              required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="orderNotes">Baking or Delivery Notes (Optional)</label>
+                    <input type="text" 
+                           id="orderNotes" 
+                           class="form-control" 
+                           placeholder="e.g. 'Please write Happy Birthday Rahul on the cake'">
+                </div>
+
+                <div style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-cream); border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 1.4rem;">💵</span>
+                        <div>
+                            <strong style="color: var(--primary); font-size: 0.95rem;">Payment Method: Pay on Delivery (Cash / UPI)</strong>
+                            <div style="font-size: 0.82rem; color: var(--text-muted);">No online advance payment required for demo.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <button type="submit" id="placeOrderBtn" class="btn btn-primary btn-block" style="padding: 1rem; font-size: 1.1rem;">
+                        🎉 Confirm & Place Order
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right: Order Items Review Summary -->
+        <div>
+            <div class="cart-summary-card">
+                <h3 class="cart-summary-title">Items in Order</h3>
+                
+                <div id="checkoutSummaryContainer" style="margin-bottom: 1.5rem;">
+                    <!-- Populated dynamically from cart.js -->
+                </div>
+
+                <div class="summary-row">
+                    <span>Delivery</span>
+                    <span style="color: #059669; font-weight: 600;">FREE</span>
+                </div>
+
+                <div class="summary-row total">
+                    <span>Grand Total</span>
+                    <span id="checkoutTotal" style="color: var(--accent-hover);">₹0.00</span>
+                </div>
+
+                <div style="text-align: center;">
+                    <a href="{{ url_for('cart_page') }}" style="color: var(--accent); font-size: 0.88rem; font-weight: 600;">
+                        &larr; Modify Cart Items
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    renderCheckoutSummary();
+});
+
+async function handlePlaceOrder(e) {
+    e.preventDefault();
+    
+    const cart = getCart();
+    if (!cart || cart.length === 0) {
+        showToast('Your cart is empty! Please add products first.', 'danger');
+        setTimeout(() => window.location.href = '/products', 1000);
+        return;
+    }
+
+    const name = document.getElementById('customerName').value.trim();
+    const phone = document.getElementById('customerPhone').value.trim();
+    const address = document.getElementById('customerAddress').value.trim();
+    const notes = document.getElementById('orderNotes').value.trim();
+
+    const placeBtn = document.getElementById('placeOrderBtn');
+    placeBtn.disabled = true;
+    placeBtn.innerHTML = 'Placing Order... ⏳';
+
+    const payload = {
+        customer_name: name,
+        phone: phone,
+        address: notes ? `${address} (Note: ${notes})` : address,
+        items: cart
+    };
+
+    try {
+        const response = await fetch('/api/orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Clear cart from localStorage
+            clearCart();
+            showToast('Order placed successfully!', 'success');
+            setTimeout(() => {
+                window.location.href = `/order-success/${result.order_id}`;
+            }, 500);
+        } else {
+            showToast(result.message || 'Error placing order.', 'danger');
+            placeBtn.disabled = false;
+            placeBtn.innerHTML = '🎉 Confirm & Place Order';
+        }
+    } catch (err) {
+        console.error('Order error:', err);
+        showToast('Network error while placing order.', 'danger');
+        placeBtn.disabled = false;
+        placeBtn.innerHTML = '🎉 Confirm & Place Order';
+    }
+}
+</script>
+{% endblock %}

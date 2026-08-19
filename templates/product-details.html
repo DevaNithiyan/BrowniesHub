@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} | Brownies Hub{% endblock %}
+
+{% block content %}
+
+<div class="container" style="padding-top: 2rem;">
+    <!-- Breadcrumb -->
+    <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+        <a href="{{ url_for('home_page') }}" style="color: var(--accent);">Home</a> &nbsp;/&nbsp; 
+        <a href="{{ url_for('products_page') }}" style="color: var(--accent);">Products</a> &nbsp;/&nbsp; 
+        <a href="{{ url_for('products_page', category=product.category_slug) }}" style="color: var(--accent);">{{ product.category_name }}</a> &nbsp;/&nbsp; 
+        <span>{{ product.name }}</span>
+    </div>
+
+    <!-- Product Main Detail Card -->
+    <div class="product-detail-layout">
+        <!-- Left: Image -->
+        <div class="product-detail-image">
+            <img src="{{ product.image }}" alt="{{ product.name }}" onerror="this.src='https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80'">
+        </div>
+
+        <!-- Right: Info -->
+        <div class="product-detail-info">
+            <span class="badge badge-amber" style="margin-bottom: 0.75rem; font-size: 0.85rem;">
+                🏷️ {{ product.category_name }}
+            </span>
+            <h1>{{ product.name }}</h1>
+            <div class="product-detail-price">₹{{ "%.2f"|format(product.price) }}</div>
+            
+            <p class="product-detail-desc">
+                {{ product.description }}
+            </p>
+
+            <!-- Bakery Highlights -->
+            <div class="product-highlights">
+                <div class="highlight-item">
+                    <span>✨</span>
+                    <span>100% Fresh Daily Batch</span>
+                </div>
+                <div class="highlight-item">
+                    <span>🧈</span>
+                    <span>Pure Dairy Butter</span>
+                </div>
+                <div class="highlight-item">
+                    <span>🌱</span>
+                    <span>No Artificial Preservatives</span>
+                </div>
+                <div class="highlight-item">
+                    <span>📦</span>
+                    <span>Eco-Friendly Bakery Box</span>
+                </div>
+            </div>
+
+            <!-- Quantity & Add to Cart Form -->
+            <div style="display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; margin-top: 2rem;">
+                <div class="quantity-control" style="background: var(--bg-surface); border: 2px solid var(--border-color);">
+                    <button type="button" class="qty-btn" id="decreaseQty" style="width: 44px; height: 44px; font-size: 1.3rem;">-</button>
+                    <input type="number" id="detailQuantity" class="qty-input" value="1" min="1" max="20" style="width: 50px; font-size: 1.1rem;" readonly>
+                    <button type="button" class="qty-btn" id="increaseQty" style="width: 44px; height: 44px; font-size: 1.3rem;">+</button>
+                </div>
+
+                <button type="button" 
+                        class="btn btn-primary" 
+                        id="detailAddToCartBtn"
+                        style="padding: 0.85rem 2rem; font-size: 1.05rem;"
+                        data-id="{{ product.id }}" 
+                        data-name="{{ product.name }}" 
+                        data-price="{{ product.price }}" 
+                        data-image="{{ product.image }}">
+                    🛒 Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    {% if related_products %}
+    <div style="margin: 4rem 0 2rem;">
+        <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+            <span class="section-subtitle">More From This Category</span>
+            <h2 class="section-title">You Might Also Love</h2>
+        </div>
+
+        <div class="products-grid">
+            {% for rel in related_products %}
+            <div class="product-card">
+                <div class="product-image-wrap">
+                    <span class="product-category-tag">{{ rel.category_name }}</span>
+                    <img src="{{ rel.image }}" alt="{{ rel.name }}" onerror="this.src='https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80'">
+                </div>
+                <div class="product-card-body">
+                    <h3 class="product-title">
+                        <a href="{{ url_for('product_details_page', product_id=rel.id) }}">{{ rel.name }}</a>
+                    </h3>
+                    <p class="product-desc">{{ rel.description }}</p>
+                    <div class="product-card-footer">
+                        <div class="product-price">₹{{ "%.2f"|format(rel.price) }}</div>
+                        <div class="product-actions">
+                            <a href="{{ url_for('product_details_page', product_id=rel.id) }}" class="btn btn-secondary btn-sm">
+                                Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const qtyInput = document.getElementById('detailQuantity');
+    const decBtn = document.getElementById('decreaseQty');
+    const incBtn = document.getElementById('increaseQty');
+    const addBtn = document.getElementById('detailAddToCartBtn');
+
+    if (decBtn && incBtn && qtyInput) {
+        decBtn.addEventListener('click', () => {
+            let val = parseInt(qtyInput.value, 10) || 1;
+            if (val > 1) qtyInput.value = val - 1;
+        });
+
+        incBtn.addEventListener('click', () => {
+            let val = parseInt(qtyInput.value, 10) || 1;
+            if (val < 20) qtyInput.value = val + 1;
+        });
+    }
+
+    if (addBtn) {
+        addBtn.addEventListener('click', () => {
+            const id = parseInt(addBtn.dataset.id, 10);
+            const name = addBtn.dataset.name;
+            const price = parseFloat(addBtn.dataset.price);
+            const image = addBtn.dataset.image;
+            const qty = parseInt(qtyInput.value, 10) || 1;
+
+            addToCart({ id, name, price, image }, qty);
+        });
+    }
+});
+</script>
+{% endblock %}

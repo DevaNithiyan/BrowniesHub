@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Customer Login | Brownies Hub{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="auth-wrapper">
+        <div class="auth-header">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Brownies Hub Logo" style="width: 72px; height: 72px; border-radius: 50%; box-shadow: 0 4px 12px rgba(99, 51, 17, 0.15); margin-bottom: 0.75rem;">
+            <h2>Welcome Back</h2>
+            <p>Log in to your Brownies Hub account to track your orders and enjoy faster checkout.</p>
+        </div>
+
+        <form id="loginForm" onsubmit="handleCustomerLogin(event)">
+            <div class="form-group">
+                <label class="form-label" for="loginEmail">Email Address *</label>
+                <input type="email" 
+                       id="loginEmail" 
+                       class="form-control" 
+                       placeholder="e.g. customer@gmail.com" 
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="loginPassword">Password *</label>
+                <input type="password" 
+                       id="loginPassword" 
+                       class="form-control" 
+                       placeholder="Enter your password" 
+                       required>
+            </div>
+
+            <!-- Demo Account Quick Fill Helper (Useful for Evaluators/Interviewers) -->
+            <div style="background: var(--bg-cream); padding: 0.75rem; border-radius: var(--radius-sm); margin-bottom: 1.25rem; font-size: 0.82rem; border: 1px dashed var(--border-color);">
+                <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.25rem;">💡 Demo Customer Account:</div>
+                <div style="color: var(--text-muted);">Email: <code>customer@gmail.com</code> | Pass: <code>customer123</code></div>
+                <button type="button" 
+                        class="btn btn-secondary btn-sm" 
+                        style="padding: 3px 8px; font-size: 0.75rem; margin-top: 5px;"
+                        onclick="document.getElementById('loginEmail').value='customer@gmail.com'; document.getElementById('loginPassword').value='customer123';">
+                    Auto-Fill Demo Credentials
+                </button>
+            </div>
+
+            <button type="submit" id="loginBtn" class="btn btn-primary btn-block" style="padding: 0.85rem; font-size: 1rem;">
+                Sign In &rarr;
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            Don't have an account yet? <a href="{{ url_for('register_page') }}">Register here</a>
+            <div style="margin-top: 0.75rem;">
+                <a href="{{ url_for('admin_login_page') }}" style="font-size: 0.82rem; color: var(--text-muted);">Are you an administrator? Admin Login &rarr;</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function handleCustomerLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const btn = document.getElementById('loginBtn');
+
+    btn.disabled = true;
+    btn.innerHTML = 'Signing In... ⏳';
+
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            showToast(result.message || 'Login successful!', 'success');
+            setTimeout(() => {
+                window.location.href = result.redirect_url || '/products';
+            }, 600);
+        } else {
+            showToast(result.message || 'Invalid email or password.', 'danger');
+            btn.disabled = false;
+            btn.innerHTML = 'Sign In &rarr;';
+        }
+    } catch (err) {
+        console.error('Login error:', err);
+        showToast('Server connection error. Please try again.', 'danger');
+        btn.disabled = false;
+        btn.innerHTML = 'Sign In &rarr;';
+    }
+}
+</script>
+{% endblock %}

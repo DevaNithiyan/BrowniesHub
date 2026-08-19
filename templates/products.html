@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Our Menu & Bakery Products | Brownies Hub{% endblock %}
+
+{% block content %}
+
+<section class="section" style="padding-top: 2.5rem;">
+    <div class="container">
+        
+        <!-- Header Banner -->
+        <div class="section-header" style="margin-bottom: 2rem;">
+            <span class="section-subtitle">Freshly Made Daily</span>
+            <h1 class="section-title">Explore Our Bakery Delights</h1>
+            <p class="section-desc">Handcrafted cakes, artisan breads, flaky pastries, and warm cookies made fresh to order.</p>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="filter-bar">
+            <!-- Search Box -->
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" 
+                       id="productSearchInput" 
+                       placeholder="Search cakes, croissants, breads, cookies..." 
+                       value="{{ search_query }}">
+            </div>
+
+            <!-- Category Filter Chips -->
+            <div class="category-chips">
+                <button type="button" 
+                        class="chip-btn {% if active_category == 'all' or not active_category %}active{% endif %}" 
+                        data-category="all">
+                    All Items
+                </button>
+                {% for cat in categories %}
+                <button type="button" 
+                        class="chip-btn {% if active_category == cat.slug %}active{% endif %}" 
+                        data-category="{{ cat.slug }}">
+                    {{ cat.name }}
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Products Grid Container -->
+        <div class="products-grid" id="productsGrid">
+            {% for product in products %}
+            <div class="product-card product-item-card" 
+                 data-category="{{ product.category_slug }}" 
+                 data-name="{{ product.name }}" 
+                 data-description="{{ product.description }}">
+                
+                <div class="product-image-wrap">
+                    <span class="product-category-tag">{{ product.category_name }}</span>
+                    <img src="{{ product.image }}" alt="{{ product.name }}" onerror="this.src='https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80'">
+                </div>
+
+                <div class="product-card-body">
+                    <h3 class="product-title">
+                        <a href="{{ url_for('product_details_page', product_id=product.id) }}">{{ product.name }}</a>
+                    </h3>
+                    <p class="product-desc">{{ product.description }}</p>
+                    
+                    <div class="product-card-footer">
+                        <div class="product-price">₹{{ "%.2f"|format(product.price) }}</div>
+                        <div class="product-actions">
+                            <a href="{{ url_for('product_details_page', product_id=product.id) }}" class="btn btn-secondary btn-sm" title="View details">
+                                Details
+                            </a>
+                            <button type="button" 
+                                    class="btn btn-primary btn-sm" 
+                                    onclick="handleAddToCart(this)" 
+                                    data-id="{{ product.id }}" 
+                                    data-name="{{ product.name }}" 
+                                    data-price="{{ product.price }}" 
+                                    data-image="{{ product.image }}">
+                                + Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- No Products Found Message -->
+        <div id="noProductsMessage" style="display: none; text-align: center; padding: 4rem 1rem; background: var(--bg-surface); border-radius: var(--radius-md); border: 1px dashed var(--border-color); margin-top: 2rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+            <h3 style="color: var(--primary-dark); margin-bottom: 0.5rem;">No matching treats found</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Try searching for a different term or clearing your category filter.</p>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('productSearchInput').value=''; document.querySelector('[data-category=all]').click();">
+                Reset Filters
+            </button>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/products.js') }}"></script>
+{% endblock %}

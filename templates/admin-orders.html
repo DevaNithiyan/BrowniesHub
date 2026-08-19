@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - Manage Orders | Brownies Hub{% endblock %}
+
+{% block content %}
+
+<div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+    <!-- Admin Header -->
+    <div class="admin-header">
+        <div>
+            <div style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.3rem;">
+                <a href="{{ url_for('admin_dashboard_page') }}" style="color: var(--accent);">&larr; Back to Dashboard</a>
+            </div>
+            <h1 style="font-size: 2rem; color: var(--primary-dark);">Customer Orders Management</h1>
+        </div>
+        <div class="badge badge-amber" style="font-size: 0.9rem; padding: 0.4rem 1rem;">
+            Total Orders: {{ orders|length }}
+        </div>
+    </div>
+
+    <!-- Orders Table Wrapper -->
+    <div class="data-table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer Name</th>
+                    <th>Phone</th>
+                    <th>Delivery Address</th>
+                    <th>Total</th>
+                    <th>Order Status</th>
+                    <th>Placed At</th>
+                    <th style="text-align: center;">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td><strong>#{{ order.id }}</strong></td>
+                    <td>
+                        <strong style="color: var(--primary-dark);">{{ order.customer_name }}</strong>
+                    </td>
+                    <td>{{ order.phone }}</td>
+                    <td style="max-width: 220px; font-size: 0.85rem; color: var(--text-muted);">
+                        {{ order.address }}
+                    </td>
+                    <td>
+                        <strong style="color: var(--accent-hover); font-size: 1rem;">₹{{ "%.2f"|format(order.total_amount) }}</strong>
+                    </td>
+                    <td>
+                        <select class="form-control" 
+                                style="padding: 5px 8px; font-size: 0.85rem; font-weight: 600; width: auto; background-color: #FFFFFF; border-color: var(--border-color);" 
+                                onchange="handleOrderStatusChange(this, {{ order.id }})">
+                            <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>⏳ Pending</option>
+                            <option value="Preparing" {% if order.status == 'Preparing' %}selected{% endif %}>🥣 Preparing</option>
+                            <option value="Ready" {% if order.status == 'Ready' %}selected{% endif %}>📦 Ready</option>
+                            <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>✅ Delivered</option>
+                            <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>❌ Cancelled</option>
+                        </select>
+                    </td>
+                    <td style="color: var(--text-muted); font-size: 0.82rem; white-space: nowrap;">
+                        {{ order.created_at }}
+                    </td>
+                    <td style="text-align: center;">
+                        <button type="button" 
+                                class="btn btn-secondary btn-sm" 
+                                style="padding: 4px 10px; font-size: 0.82rem;"
+                                onclick="viewOrderDetails({{ order.id }})">
+                            👁️ View Items
+                        </button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                        No customer orders recorded yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Order Details Modal -->
+<div class="modal-overlay" id="orderDetailsModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3 style="font-size: 1.25rem; color: var(--primary-dark);">
+                Order Details <span id="modalOrderId" style="color: var(--accent);"></span>
+            </h3>
+            <button type="button" class="modal-close" onclick="closeModal('orderDetailsModal')">&times;</button>
+        </div>
+
+        <div style="font-size: 0.92rem; margin-bottom: 1.25rem; line-height: 1.6; background: var(--bg-cream); padding: 1rem; border-radius: var(--radius-md);">
+            <div><strong>Customer:</strong> <span id="modalCustomerName"></span></div>
+            <div><strong>Phone:</strong> <span id="modalCustomerPhone"></span></div>
+            <div><strong>Address:</strong> <span id="modalCustomerAddress"></span></div>
+            <div style="margin-top: 4px;"><strong>Current Status:</strong> <span id="modalOrderStatus" class="badge badge-amber"></span></div>
+        </div>
+
+        <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--primary); border-bottom: 1px solid var(--border-subtle); padding-bottom: 4px;">Items in this Order:</h4>
+        <div id="modalOrderItems" style="margin-bottom: 1.25rem;"></div>
+
+        <div style="display: flex; justify-content: space-between; font-size: 1.15rem; padding-top: 0.75rem; border-top: 2px dashed var(--border-color); margin-bottom: 1.5rem;">
+            <strong>Total Amount:</strong>
+            <strong id="modalOrderTotal" style="color: var(--accent-hover);"></strong>
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-block" onclick="closeModal('orderDetailsModal')">
+            Close Window
+        </button>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - Manage Products | Brownies Hub{% endblock %}
+
+{% block content %}
+
+<div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+    <!-- Admin Header -->
+    <div class="admin-header">
+        <div>
+            <div style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.3rem;">
+                <a href="{{ url_for('admin_dashboard_page') }}" style="color: var(--accent);">&larr; Back to Dashboard</a>
+            </div>
+            <h1 style="font-size: 2rem; color: var(--primary-dark);">Bakery Products Management</h1>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="openAddProductModal()">
+            ➕ Add New Product
+        </button>
+    </div>
+
+    <!-- Products Table Wrapper -->
+    <div class="data-table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                    <th style="text-align: center;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td style="width: 70px;">
+                        <img src="{{ product.image }}" alt="{{ product.name }}" style="width: 50px; height: 50px; border-radius: var(--radius-sm); object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80'">
+                    </td>
+                    <td>
+                        <strong style="color: var(--primary-dark); font-size: 0.95rem;">{{ product.name }}</strong>
+                    </td>
+                    <td>
+                        <span class="badge badge-amber">{{ product.category_name }}</span>
+                    </td>
+                    <td>
+                        <strong style="color: var(--accent-hover);">₹{{ "%.2f"|format(product.price) }}</strong>
+                    </td>
+                    <td style="color: var(--text-muted); font-size: 0.85rem; max-width: 280px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        {{ product.description }}
+                    </td>
+                    <td style="text-align: center; white-space: nowrap;">
+                        <button type="button" 
+                                class="btn btn-secondary btn-sm" 
+                                style="padding: 4px 10px; margin-right: 4px;"
+                                onclick="openEditProductModal(this)"
+                                data-id="{{ product.id }}"
+                                data-name="{{ product.name }}"
+                                data-category-id="{{ product.category_id }}"
+                                data-price="{{ product.price }}"
+                                data-image="{{ product.image }}"
+                                data-description="{{ product.description }}">
+                            ✏️ Edit
+                        </button>
+
+                        <button type="button" 
+                                class="btn btn-danger btn-sm" 
+                                style="padding: 4px 10px;"
+                                onclick="handleDeleteProduct({{ product.id }}, '{{ product.name }}')">
+                            🗑️ Delete
+                        </button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                        No products available in the database. Click "+ Add New Product" to create one.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add / Edit Product Modal Dialog -->
+<div class="modal-overlay" id="productModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3 id="productModalTitle" style="font-size: 1.25rem; color: var(--primary-dark);">Add New Bakery Product</h3>
+            <button type="button" class="modal-close" onclick="closeModal('productModal')">&times;</button>
+        </div>
+
+        <form id="productForm" onsubmit="handleSaveProduct(event)">
+            <input type="hidden" id="productId" value="">
+
+            <div class="form-group">
+                <label class="form-label" for="productName">Product Name *</label>
+                <input type="text" id="productName" class="form-control" placeholder="e.g. Belgian Chocolate Cake" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="productCategory">Category *</label>
+                <select id="productCategory" class="form-control" required>
+                    <option value="">-- Select Bakery Category --</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}">{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="productPrice">Price in INR (₹) *</label>
+                <input type="number" id="productPrice" class="form-control" placeholder="e.g. 450.00" step="0.50" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="productImage">Image URL (Unsplash or direct link)</label>
+                <input type="url" id="productImage" class="form-control" placeholder="https://images.unsplash.com/photo-...">
+                <div class="form-text">Paste a web image URL or leave empty for default bakery image.</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="productDescription">Description *</label>
+                <textarea id="productDescription" class="form-control" rows="3" placeholder="Describe the ingredients, taste, and baking technique..." required></textarea>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+                <button type="submit" id="saveProductBtn" class="btn btn-primary" style="flex: 1;">
+                    Save Product
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('productModal')">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

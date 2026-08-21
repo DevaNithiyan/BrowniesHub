@@ -20,7 +20,7 @@
                 <a href="{{ url_for('products_page') }}" class="btn btn-primary">
                     Explore Our Menu 🍰
                 </a>
-                <a href="#about" class="btn btn-secondary">
+                <a href="{{ url_for('about_page') }}" class="btn btn-secondary">
                     Our Story 📖
                 </a>
             </div>
@@ -164,6 +164,12 @@
                     <h4>🚚 Fresh Local Delivery</h4>
                     <p>Packaged with care and delivered swiftly across the city.</p>
                 </div>
+            </div>
+
+            <div style="margin-top: 1.75rem;">
+                <a href="{{ url_for('about_page') }}" class="btn btn-secondary">
+                    Read Our Full Story & Heritage &rarr;
+                </a>
             </div>
         </div>
     </div>

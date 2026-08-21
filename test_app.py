@@ -63,6 +63,12 @@ def run_tests():
     res = client.get('/admin/login')
     test("GET /admin/login", res.status_code == 200 and b"Bakery Admin Portal" in res.data)
 
+    # 8. About & Contact dedicated pages
+    res = client.get('/about')
+    test("GET /about (About Us page)", res.status_code == 200 and b"The Sweet Crumbs Story" in res.data)
+    res = client.get('/contact')
+    test("GET /contact (Contact & Location page)", res.status_code == 200 and b"Contact Brownies Hub" in res.data)
+
     print("\n--- 2. Testing API Endpoints ---")
     
     # Products API

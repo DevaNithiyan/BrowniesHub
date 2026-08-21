@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}About Our Bakery | Brownies Hub & Sweet Crumbs{% endblock %}
+
+{% block content %}
+
+<!-- Header Page Banner -->
+<section class="section" style="background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: #FFFFFF; padding: 4rem 0 3.5rem; text-align: center;">
+    <div class="container">
+        <span class="hero-tag" style="background: rgba(255, 255, 255, 0.15); color: #FEF3C7; border: 1px solid rgba(255, 255, 255, 0.2);">
+            ✨ Handcrafted With Love Since 2020
+        </span>
+        <h1 style="color: #FFFFFF; font-size: 2.8rem; margin: 1rem 0 0.75rem; font-weight: 800;">
+            The Sweet Crumbs Story
+        </h1>
+        <p style="color: #EBDED6; font-size: 1.1rem; max-width: 650px; margin: 0 auto;">
+            From a humble family kitchen to your favorite artisan bakery — discover how our passion for slow baking and pure ingredients brings you the finest treats.
+        </p>
+    </div>
+</section>
+
+<!-- Main Story Section -->
+<section class="section" style="padding: 4rem 0;">
+    <div class="container about-grid" style="align-items: center;">
+        <div class="about-image" style="position: relative;">
+            <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80" 
+                 alt="Baking in Progress" 
+                 style="border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); width: 100%; height: 420px; object-fit: cover; border: 6px solid #FFFFFF;">
+            <div class="floating-badge" style="bottom: 20px; right: -10px; left: auto; background: #FFFFFF; padding: 1rem 1.4rem; border-radius: var(--radius-md); box-shadow: var(--shadow-md); border: 1px solid var(--border-color); display: flex; align-items: center; gap: 0.75rem;">
+                <span style="font-size: 2rem;">🥖</span>
+                <div>
+                    <strong style="display: block; color: var(--primary); font-size: 0.95rem;">100% Traditional Methods</strong>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">Slow natural fermentation</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="about-content">
+            <span class="section-subtitle">Our Heritage</span>
+            <h2 class="section-title" style="text-align: left; margin-bottom: 1.25rem;">
+                Artisanal Baking Rooted in Passion & Uncompromising Quality
+            </h2>
+            <p style="color: var(--text-muted); margin-bottom: 1.25rem; font-size: 1rem; line-height: 1.75;">
+                Started as a humble family kitchen in Bengaluru, <strong>Brownies Hub & Sweet Crumbs</strong> was built on a simple philosophy: never cut corners on quality. We believe that truly memorable baked goods come from patience, craft, and the finest natural ingredients.
+            </p>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 1rem; line-height: 1.75;">
+                Every single morning at 5:00 AM, our bakers begin kneading stone-ground flour, whipping fresh dairy cream, and tempering authentic Belgian chocolate. No margarine, no artificial preservatives, no shortcuts — just pure baked happiness.
+            </p>
+            
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="{{ url_for('products_page') }}" class="btn btn-primary">
+                    Explore Our Menu 🍰
+                </a>
+                <a href="{{ url_for('contact_page') }}" class="btn btn-secondary">
+                    Visit Bakery & Contact 📍
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 4 Core Pillars -->
+<section class="section" style="background-color: var(--bg-surface); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 4rem 0;">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-subtitle">Why Choose Us</span>
+            <h2 class="section-title">The Four Pillars of Sweet Crumbs</h2>
+            <p class="section-desc">What makes our brownies, cakes, pastries, and breads taste truly exceptional.</p>
+        </div>
+
+        <div class="about-features" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <div class="about-feature-item" style="background: var(--bg-cream); padding: 2rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); text-align: left;">
+                <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🧈</div>
+                <h3 style="font-size: 1.25rem; color: var(--primary); margin-bottom: 0.5rem; font-weight: 700;">100% Farm Dairy Butter</h3>
+                <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">
+                    We never use hydrogenated oils or margarine. Every croissant and cake is laminated with real dairy butter for unmatched flakiness.
+                </p>
+            </div>
+
+            <div class="about-feature-item" style="background: var(--bg-cream); padding: 2rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); text-align: left;">
+                <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🍫</div>
+                <h3 style="font-size: 1.25rem; color: var(--primary); margin-bottom: 0.5rem; font-weight: 700;">Belgian Couverture Chocolate</h3>
+                <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">
+                    Our decadent brownies, cookies, and chocolate cakes use single-origin Belgian cocoa and rich cacao butter for a melt-in-mouth experience.
+                </p>
+            </div>
+
+            <div class="about-feature-item" style="background: var(--bg-cream); padding: 2rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); text-align: left;">
+                <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🌾</div>
+                <h3 style="font-size: 1.25rem; color: var(--primary); margin-bottom: 0.5rem; font-weight: 700;">24-Hour Sourdough Ferment</h3>
+                <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">
+                    Our sourdough loaves and artisan baguettes undergo slow 24-hour natural wild fermentation for easier digestion and incredible depth of flavor.
+                </p>
+            </div>
+
+            <div class="about-feature-item" style="background: var(--bg-cream); padding: 2rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); text-align: left;">
+                <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🚚</div>
+                <h3 style="font-size: 1.25rem; color: var(--primary); margin-bottom: 0.5rem; font-weight: 700;">Daily Fresh Oven Delivery</h3>
+                <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">
+                    We bake in small daily batches so you receive bread and pastries freshly out of the oven, delivered warm to your doorstep.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Banner -->
+<section class="section" style="padding: 4rem 0; text-align: center;">
+    <div class="container" style="max-width: 800px; background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); padding: 3rem 2rem; border-radius: var(--radius-lg); border: 1px solid #FCD34D;">
+        <span style="font-size: 3rem; display: block; margin-bottom: 0.5rem;">🍰</span>
+        <h2 style="color: var(--primary-dark); font-size: 2.2rem; margin-bottom: 0.75rem;">Ready to Taste the Difference?</h2>
+        <p style="color: #78350F; font-size: 1.05rem; margin-bottom: 1.75rem;">
+            Order your favorite artisanal cakes, croissants, and signature brownies online today.
+        </p>
+        <a href="{{ url_for('products_page') }}" class="btn btn-primary" style="padding: 0.9rem 2.5rem; font-size: 1.05rem;">
+            Browse Bakery Menu &rarr;
+        </a>
+    </div>
+</section>
+
+{% endblock %}

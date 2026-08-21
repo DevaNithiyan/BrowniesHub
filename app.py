@@ -144,7 +144,20 @@ def home_page():
     return render_template('index.html', featured_products=featured_products, categories=categories)
 
 
+@app.route('/about')
+def about_page():
+    """Renders the dedicated About Us story & bakery heritage page."""
+    return render_template('about.html')
+
+
+@app.route('/contact')
+def contact_page():
+    """Renders the dedicated Contact & Bakery Location page."""
+    return render_template('contact.html')
+
+
 @app.route('/products')
+
 def products_page():
     """Renders the Products Catalog page with search and category filtering."""
     category_filter = request.args.get('category', 'all')

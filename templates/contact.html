@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us & Bakery Location | Brownies Hub{% endblock %}
+
+{% block content %}
+
+<!-- Header Banner -->
+<section class="section" style="background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: #FFFFFF; padding: 4rem 0 3.5rem; text-align: center;">
+    <div class="container">
+        <span class="hero-tag" style="background: rgba(255, 255, 255, 0.15); color: #FEF3C7; border: 1px solid rgba(255, 255, 255, 0.2);">
+            👋 We'd Love to Hear From You
+        </span>
+        <h1 style="color: #FFFFFF; font-size: 2.8rem; margin: 1rem 0 0.75rem; font-weight: 800;">
+            Contact Brownies Hub
+        </h1>
+        <p style="color: #EBDED6; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+            Have a question about custom cake orders, event catering, or delivery? Reach out to our bakery team!
+        </p>
+    </div>
+</section>
+
+<!-- Contact Form & Info Grid -->
+<section class="section" style="padding: 4rem 0;">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem; align-items: start;">
+            
+            <!-- Contact Details Card -->
+            <div style="background: var(--bg-surface); padding: 2.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+                <span class="section-subtitle">Get In Touch</span>
+                <h2 style="font-size: 1.8rem; color: var(--primary); margin-bottom: 1.5rem;">Visit Our Bakery Store</h2>
+                
+                <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2.5rem;">
+                    
+                    <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--bg-cream); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; border: 1px solid var(--border-color);">
+                            📍
+                        </div>
+                        <div>
+                            <strong style="display: block; color: var(--text-main); font-size: 1rem; margin-bottom: 0.2rem;">Main Bakery Kitchen</strong>
+                            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.5;">
+                                142 MG Road, Indiranagar, Bengaluru, Karnataka, 560038
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--bg-cream); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; border: 1px solid var(--border-color);">
+                            📞
+                        </div>
+                        <div>
+                            <strong style="display: block; color: var(--text-main); font-size: 1rem; margin-bottom: 0.2rem;">Phone & WhatsApp Orders</strong>
+                            <p style="color: var(--text-muted); font-size: 0.92rem;">
+                                <a href="tel:+919876543210" style="color: var(--accent); font-weight: 600;">+91 98765 43210</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--bg-cream); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; border: 1px solid var(--border-color);">
+                            ✉️
+                        </div>
+                        <div>
+                            <strong style="display: block; color: var(--text-main); font-size: 1rem; margin-bottom: 0.2rem;">Email Support</strong>
+                            <p style="color: var(--text-muted); font-size: 0.92rem;">
+                                <a href="mailto:hello@brownieshub.com" style="color: var(--accent); font-weight: 600;">hello@brownieshub.com</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--bg-cream); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; border: 1px solid var(--border-color);">
+                            🕒
+                        </div>
+                        <div>
+                            <strong style="display: block; color: var(--text-main); font-size: 1rem; margin-bottom: 0.2rem;">Baking & Store Hours</strong>
+                            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.5;">
+                                Monday – Sunday: 7:00 AM – 10:00 PM<br>
+                                <span style="color: #059669; font-weight: 600;">✨ Fresh batches ready every morning at 7:00 AM</span>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div style="background: var(--bg-cream); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                    <strong style="display: block; color: var(--primary); font-size: 0.95rem; margin-bottom: 0.3rem;">🚚 Citywide Express Delivery</strong>
+                    <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5;">
+                        We deliver fresh pastries, brownies, and cakes within 45–60 minutes across Bengaluru.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Interactive Contact Form -->
+            <div style="background: var(--bg-surface); padding: 2.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+                <span class="section-subtitle">Send a Message</span>
+                <h2 style="font-size: 1.8rem; color: var(--primary); margin-bottom: 0.75rem;">How Can We Help You?</h2>
+                <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 2rem;">
+                    Fill in the details below and our team will get back to you within 2 business hours.
+                </p>
+
+                <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                    <div class="form-group" style="margin-bottom: 1.2rem;">
+                        <label class="form-label" for="contactName">Your Name *</label>
+                        <input type="text" id="contactName" class="form-control" placeholder="e.g. Priya Nair" required>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.2rem;">
+                        <div class="form-group">
+                            <label class="form-label" for="contactEmail">Email Address *</label>
+                            <input type="email" id="contactEmail" class="form-control" placeholder="e.g. priya@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="contactPhone">Phone Number</label>
+                            <input type="tel" id="contactPhone" class="form-control" placeholder="+91 98765 43210">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 1.2rem;">
+                        <label class="form-label" for="contactSubject">Inquiry Type *</label>
+                        <select id="contactSubject" class="form-control" required>
+                            <option value="General Question">General Question</option>
+                            <option value="Custom Cake Order">Custom Birthday / Wedding Cake</option>
+                            <option value="Bulk / Corporate Order">Bulk / Corporate Gifting Order</option>
+                            <option value="Feedback & Support">Feedback / Order Support</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 1.75rem;">
+                        <label class="form-label" for="contactMessage">Your Message *</label>
+                        <textarea id="contactMessage" class="form-control" rows="5" placeholder="Tell us what delicious treats you're thinking of..." required></textarea>
+                    </div>
+
+                    <button type="submit" id="contactSubmitBtn" class="btn btn-primary btn-block" style="padding: 0.9rem; font-size: 1rem;">
+                        Send Message &rarr;
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+function handleContactSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('contactSubmitBtn');
+    btn.disabled = true;
+    btn.innerHTML = 'Sending Message... ⏳';
+
+    setTimeout(() => {
+        showToast('Thank you! Your message has been sent. We will respond shortly.', 'success');
+        document.getElementById('contactForm').reset();
+        btn.disabled = false;
+        btn.innerHTML = 'Send Message &rarr;';
+    }, 800);
+}
+</script>
+{% endblock %}

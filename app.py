@@ -30,11 +30,36 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app = Flask(
     __name__,
     template_folder=os.path.join(BASE_DIR, 'templates'),
-    static_folder=os.path.join(BASE_DIR, 'static')
+    static_folder=os.path.join(BASE_DIR, 'static'),
+    static_url_path='/static'
 )
 
 # Secret key is required for Flask session cookies
 app.secret_key = os.getenv('SECRET_KEY', 'brownies_hub_secret_key_2026')
+
+
+class VercelPathMiddleware:
+    """
+    WSGI middleware that fixes PATH_INFO on Vercel deployments.
+    Restores the original request path from HTTP_X_MATCHED_PATH or REQUEST_URI.
+    """
+    def __init__(self, wsgi_app):
+        self.wsgi_app = wsgi_app
+
+    def __call__(self, environ, start_response):
+        matched_path = environ.get('HTTP_X_MATCHED_PATH')
+        if matched_path and matched_path != '/404' and not matched_path.startswith('/api/index'):
+            path = matched_path.split('?')[0]
+            environ['PATH_INFO'] = path
+        elif environ.get('PATH_INFO') in ('/api/index.py', '/api/index', '/api', '', None):
+            raw_uri = environ.get('REQUEST_URI') or environ.get('RAW_URI') or environ.get('HTTP_X_VERCEL_PATH') or '/'
+            path = raw_uri.split('?')[0]
+            if path and not path.startswith('/api/index'):
+                environ['PATH_INFO'] = path
+
+        return self.wsgi_app(environ, start_response)
+
+app.wsgi_app = VercelPathMiddleware(app.wsgi_app)
 
 
 # -------------------------------------------------------------------
@@ -608,11 +633,11 @@ def serve_logo(filename):
 # -------------------------------------------------------------------
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('index.html', error="The requested page was not found."), 404
+    return render_template('404.html'), 404
 
 @app.errorhandler(500)
 def internal_server_error(e):
-    return render_template('index.html', error="An internal server error occurred. Please try again."), 500
+    return render_template('404.html'), 500
 
 
 # -------------------------------------------------------------------

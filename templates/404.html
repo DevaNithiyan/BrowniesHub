@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}404 - Page Not Found | Brownies Hub{% endblock %}
+
+{% block content %}
+<div class="container" style="text-align: center; padding: 5rem 1rem;">
+    <div style="font-size: 5rem; line-height: 1; margin-bottom: 1rem;">🧁 404</div>
+    <h1 style="color: var(--primary-dark); font-size: 2.2rem; margin-bottom: 0.75rem;">Oops! Sweet Treat Not Found</h1>
+    <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto 2rem auto;">
+        The page you are looking for might have been moved, removed, or is temporarily unavailable.
+    </p>
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="{{ url_for('home_page') }}" class="btn btn-primary">
+            Return Home &rarr;
+        </a>
+        <a href="{{ url_for('products_page') }}" class="btn btn-secondary">
+            Browse Menu 🍰
+        </a>
+    </div>
+</div>
+{% endblock %}

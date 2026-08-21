@@ -41,8 +41,7 @@ app.secret_key = os.getenv('SECRET_KEY', 'brownies_hub_secret_key_2026')
 class VercelPathMiddleware:
     """
     WSGI middleware that fixes PATH_INFO on Vercel deployments.
-    Restores the original request path from __path query parameter,
-    HTTP_X_MATCHED_PATH, or REQUEST_URI.
+    Restores the original request path from __path query parameter or REQUEST_URI.
     """
     def __init__(self, wsgi_app):
         self.wsgi_app = wsgi_app
@@ -63,12 +62,9 @@ class VercelPathMiddleware:
                 environ['QUERY_STRING'] = urllib.parse.urlencode(clean_params, doseq=True)
                 return self.wsgi_app(environ, start_response)
                 
-        # 2. Check X-Matched-Path header
-        matched_path = environ.get('HTTP_X_MATCHED_PATH')
-        if matched_path and matched_path != '/404' and not matched_path.startswith('/api/index'):
-            path = matched_path.split('?')[0]
-            environ['PATH_INFO'] = path
-        elif environ.get('PATH_INFO') in ('/api/index.py', '/api/index', '/api', '', None):
+        # 2. Check if PATH_INFO is missing or pointing to the script name
+        current_path = environ.get('PATH_INFO', '')
+        if current_path in ('/api/index.py', '/api/index', '/api', '', None):
             raw_uri = environ.get('REQUEST_URI') or environ.get('RAW_URI') or environ.get('HTTP_X_VERCEL_PATH') or '/'
             path = raw_uri.split('?')[0]
             if path and not path.startswith('/api/index'):

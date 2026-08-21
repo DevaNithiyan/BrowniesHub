@@ -1445,19 +1445,104 @@ button, input, select, textarea {
     gap: 1rem;
 }
 
-/* --- 18. Mobile Responsiveness Breakpoints --- */
+/* --- 18. Mobile & iOS Responsiveness Breakpoints --- */
+:root {
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+    --sal: env(safe-area-inset-left, 0px);
+    --sar: env(safe-area-inset-right, 0px);
+}
+
+/* iOS Touch and Tap Enhancements */
+* {
+    -webkit-tap-highlight-color: rgba(217, 119, 6, 0.15);
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding-bottom: var(--sab);
+}
+
+/* Safe area support for sticky header */
+.navbar {
+    padding-top: var(--sat);
+}
+
+/* Mobile Navigation Drawer with Hardware Acceleration */
+.mobile-nav-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(320px, 85vw);
+    height: 100%;
+    height: 100dvh;
+    background-color: #FFFFFF;
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.18);
+    z-index: 999;
+    padding: calc(1.5rem + var(--sat)) 1.5rem calc(1.5rem + var(--sab)) 1.5rem;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(105%);
+    transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+}
+
+.mobile-nav-drawer.active {
+    transform: translateX(0);
+}
+
+/* Smooth Category Filter Swipe Bar on Mobile */
+.filter-chips {
+    display: flex;
+    gap: 0.6rem;
+    overflow-x: auto;
+    padding: 0.3rem 0.2rem 0.8rem 0.2rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.filter-chips::-webkit-scrollbar {
+    display: none;
+}
+
+.chip-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Table Responsive Containers */
+.table-responsive, .admin-table-wrapper, .cart-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-md);
+}
+
 @media (max-width: 992px) {
     .hero-grid {
         grid-template-columns: 1fr;
         gap: 2.5rem;
+        text-align: center;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+    }
+    
+    .hero-stats {
+        justify-content: center;
     }
     
     .hero-title {
-        font-size: 2.6rem;
+        font-size: 2.5rem;
     }
     
     .categories-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
     }
     
     .admin-stats-grid {
@@ -1466,24 +1551,44 @@ button, input, select, textarea {
     
     .footer-grid {
         grid-template-columns: 1fr 1fr;
+        gap: 2rem;
     }
     
     .product-detail-layout {
         grid-template-columns: 1fr;
+        gap: 2rem;
     }
     
     .cart-layout {
         grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .checkout-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
     }
 }
 
 @media (max-width: 768px) {
+    /* Prevent iOS Safari input auto-zoom by enforcing 16px font */
+    input, select, textarea, .form-control {
+        font-size: 16px !important;
+    }
+
     .nav-links, .nav-auth-links {
-        display: none;
+        display: none !important;
     }
     
     .hamburger-btn {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+        border-radius: var(--radius-sm);
+        background-color: var(--bg-cream);
+        border: 1px solid var(--border-color);
     }
     
     .hero-section {
@@ -1492,19 +1597,36 @@ button, input, select, textarea {
     
     .hero-title {
         font-size: 2.1rem;
+        line-height: 1.2;
     }
     
     .hero-stats {
-        gap: 1.5rem;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+    }
+    
+    .hero-stat-item h4 {
+        font-size: 1.4rem;
     }
     
     .about-grid {
         grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .about-features {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
     }
     
     .filter-bar {
         flex-direction: column;
         align-items: stretch;
+        gap: 1rem;
+    }
+    
+    .filter-search-wrap {
+        width: 100%;
     }
     
     .footer-grid {
@@ -1514,28 +1636,86 @@ button, input, select, textarea {
     
     .auth-wrapper {
         padding: 2rem 1.25rem;
-        margin: 2rem auto;
+        margin: 1.5rem auto;
+        max-width: 100%;
+    }
+
+    .toast-container, #toastContainer {
+        left: 16px !important;
+        right: 16px !important;
+        bottom: calc(16px + var(--sab)) !important;
+        width: auto !important;
     }
 }
 
 @media (max-width: 480px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    .brand-logo {
+        font-size: 1.25rem;
+    }
+
+    .brand-logo-img {
+        width: 38px;
+        height: 38px;
+    }
+
     .categories-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
     }
     
     .admin-stats-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
     
     .about-features {
         grid-template-columns: 1fr;
+        gap: 0.85rem;
     }
     
     .hero-buttons {
         flex-direction: column;
+        width: 100%;
+        gap: 0.75rem;
     }
     
     .hero-buttons .btn {
         width: 100%;
+        min-height: 48px;
+    }
+
+    .btn {
+        min-height: 44px;
+        padding: 0.75rem 1.25rem;
+    }
+
+    .product-actions {
+        width: 100%;
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .product-actions .btn {
+        flex: 1;
+    }
+
+    .product-card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.85rem;
+    }
+
+    .product-card-footer .product-actions {
+        width: 100%;
     }
 }
+

@@ -3,10 +3,18 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#633311">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Brownies Hub">
+    <meta name="format-detection" content="telephone=no">
     <meta name="description"
         content="Sweet Crumbs Bakery & Brownies Hub - Handcrafted artisanal brownies, cakes, pastries, breads, and cookies baked fresh every day.">
     <title>{% block title %}Brownies Hub | Fresh Artisanal Bakery{% endblock %}</title>
+
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/logo.png') }}">
 
     <!-- Stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">

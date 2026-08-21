@@ -98,7 +98,10 @@ async function handleSaveProduct(event) {
     }
 }
 
-async function handleDeleteProduct(productId, productName) {
+async function handleDeleteProduct(target, fallbackName) {
+    const productId = (target && target.dataset) ? target.dataset.id : target;
+    const productName = (target && target.dataset) ? target.dataset.name : (fallbackName || 'this product');
+
     if (!confirm(`Are you sure you want to delete "${productName}"? This action cannot be undone.`)) {
         return;
     }
